@@ -31,12 +31,14 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
         http.authorizeHttpRequests(request ->
                 request.requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers("/isa/**").hasRole("isa")
+                        .requestMatchers("/investment/**").hasRole("investment")
                         .anyRequest().authenticated()
         );
         http.formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/welcome", true)
+                .defaultSuccessUrl("/welcome")
                 .permitAll()
         );
         http.logout(logout -> logout
