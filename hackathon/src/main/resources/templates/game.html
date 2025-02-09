@@ -139,9 +139,14 @@
         <button value="7">$7</button>
     </div>
     <div class="item">
-        <p>Or invest a custom amount of money</p>
-        <div class="currency-symbol">£</div>
-        <input type="number" id="money" min="1" max="100"/>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8-42l4iHFTUba8wKnsbZzpUnsfZglS9k9Ow&s" alt="Greggs Sausage Roll">
+        <p>Greggs sausage roll</p>
+        <button value="2">$2</button>
+    </div>
+    <div class="item">
+        <p>Invest a custom amount of money (up to $1000)</p>
+        <div class="currency-symbol">$</div>
+        <input type="number" id="money" min="1" max="1000"/>
     </div>
 </div>
 <script>
@@ -249,8 +254,35 @@
                 }
 
                 balanceDisplay.textContent = `Current Balance: $${balance}`;
+                return balance;
             } catch (error) {
                 console.error(`Error fetching balance: ${error}`);
+            }
+        }
+
+        //TODO: Finish subtraction function
+        async function subtractBalance(money) {
+            try {
+                const username = await getUsername();
+                if (!username) {
+                    return;
+                }
+                const subtract = await fetch('/api/money/subtract?username=${username}?money=${money}');
+            } catch (error) {
+                console.error(`Error fetching subtract: ${error}`);
+            }
+        }
+
+        //TODO: Finish addition function
+        async function addBalance(money) {
+            try {
+                const username = await getUsername();
+                if (!username) {
+                    return;
+                }
+                const subtract = await fetch('/api/money/add?username=${username}?money=${money}');
+            } catch (error) {
+                console.error(`Error fetching add: ${error}`);
             }
         }
 
