@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>S&P 500 Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/dist/chartjs-plugin-zoom.min.js"></script>
 </head>
 <body>
 <h1>Graph Data</h1>
@@ -99,6 +100,22 @@
                 ]
             },
             options: {
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                        },
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'xy',
+                        },
+                    },
+                },
                 scales: {
                     y: {
                         beginAtZero: false,
