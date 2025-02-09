@@ -23,6 +23,30 @@ public class UserService {
         user.setFullName(fullName);
         user.setInvestmentType(investmentType);
         user.setPassword(passwordEncoder.encode(password));
+        user.setMoney(1000);
         userRepository.save(user);
+    }
+
+    public void addMoney(String username, int money) {
+        User user = userRepository.findByUsername(username);
+        user.setMoney(user.getMoney() + money);
+        userRepository.save(user);
+    }
+
+    public void subtractMoney(String username, int money) {
+        User user = userRepository.findByUsername(username);
+        if (user.getMoney() < money) {
+            user.setMoney(0);
+        }
+        else{
+            user.setMoney(user.getMoney() - money);
+        }
+        userRepository.save(user);
+    }
+
+    public int checkBalance(String username) {
+        User user = userRepository.findByUsername(username);
+        return (user != null) ? user.getMoney() : 0;
+
     }
 }

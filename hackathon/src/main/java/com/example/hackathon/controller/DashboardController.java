@@ -10,5 +10,10 @@ public class DashboardController {
         return "graphs";
     }
 
+    @GetMapping("/game")
+    public String game() {
+        return "game";
+    }
+
 
 }

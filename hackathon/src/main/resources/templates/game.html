@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gamified Investment</title>
+    <h1>Wow, look at those stock options</h1>
+</head>
+<body>
+<p></p>
+</body>
+<script>
+    async function fetchStockData() {
+        const ticker = document.getElementById('ticker').value.toUpperCase();
+        if (!ticker) {
+            alert("Please enter a ticker!");
+            return;
+        }
+
+        const url = `https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/history?symbol=${ticker}&interval=1d&diffandsplits=false`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '5271f027a1mshafaa054b903d680p14eae2jsnb72b85889940',
+                'x-rapidapi-host': 'yahoo-finance15.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const json = await response.json();
+
+            const items = json.body;
+            if (!items || Object.keys(items).length === 0) {
+                throw new Error('No data received for this ticker');
+            }
+
+            const dates = [];
+            const opens = [];
+            const closes = [];
+
+            let tracker = 0;
+            const sortedDates = Object.keys(items).sort().reverse();
+            for (const date of sortedDates) {
+                if (tracker === 7) {
+                    break;
+                }
+                const item = items[date];
+                const [day, month, year] = item.date.split('-');
+                const formattedDate = `${day}/${month}/${year}`;
+                dates.push(formattedDate);
+                opens.push(item.open);
+                closes.push(item.close);
+                tracker++;
+            }
+            dates.reverse();
+            opens.reverse();
+            closes.reverse();
+
+
+        } catch (error) {
+            console.error(`Error fetching stock: ${error}`);
+            alert(`Error fetching stock: ${error.message}`);
+        }
+    }
+</script>
+</body>
+</html>

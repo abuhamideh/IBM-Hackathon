@@ -14,6 +14,7 @@ public class User {
     private String password;
     private String fullName;
     private String investmentType;
+    private int money;
 
     public UUID getId() {
         return id;
@@ -49,5 +50,13 @@ public class User {
 
     public void setInvestmentType(String investmentType) {
         this.investmentType = investmentType;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }
