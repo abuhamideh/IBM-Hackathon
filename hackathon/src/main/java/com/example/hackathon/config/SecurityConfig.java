@@ -33,6 +33,7 @@ public class SecurityConfig {
                 request.requestMatchers("/register", "/login").permitAll()
                         .requestMatchers("/isa/**").hasRole("isa")
                         .requestMatchers("/investment/**").hasRole("investment")
+                        .requestMatchers("/js/**", "/css/**").permitAll()
                         .anyRequest().authenticated()
         );
         http.formLogin(form -> form

@@ -9,4 +9,6 @@ public class DashboardController {
     public String graphs() {
         return "graphs";
     }
+
+
 }
