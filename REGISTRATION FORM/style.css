@@ -1,0 +1,23 @@
+*{text-align: center;
+}
+p{
+    font-size: small;
+}
+a{
+    font-size: small;
+}
+section{
+   display: inline-block;
+    background-color: rgba(201, 202, 203, 0.901);
+    padding: 50px;
+    border: rgb(58, 133, 131) 5px solid;
+}
+
+button{
+    background-color: black;
+    color: white;
+}
+#submit{
+    color: white;
+    
+}
