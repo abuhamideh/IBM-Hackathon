@@ -4,18 +4,60 @@
     <meta charset="UTF-8">
     <title>Gamified Investment</title>
     <h1>Wow, look at those stock options</h1>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/dist/chartjs-plugin-zoom.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+        #chart {
+            height: 50%;
+            width: 50%;
+        }
+        canvas {
+            height: 50%;
+            width: 50%;
+        }
+        #stock-info {
+            visibility: hidden;
+        }
+        #game-info {
+            visibility: hidden;
+        }
+    </style>
 </head>
 <body>
-<p></p>
-</body>
+<button id="start-button" onclick="fetchStockData()">Start Game</button>
+<div id="stock-info">
+    <p>Random Stock: <span id="ticker-display"></span></p>
+    <p>Time Period: <span id="year-display"></span></p>
+    <button class="reroll-button" onclick="fetchStockData()">Reroll Stocks</button>
+</div>
+<div id="chart">
+    <canvas id="stock"></canvas>
+</div>
+<div id="game-info">
+    <h2>How much do you want to invest?</h2>
+    <img src="https://media.istockphoto.com/id/1143290013/photo/coffee-cup-isolated.jpg?s=612x612&w=0&k=20&c=fEsmHH_kDh-vPxukZuaMs54D0kg2BTEDgS8lnWu8bBs=" alt="Coffee Cup">
+    <p>A cup of coffee</p>
+    <button value="3">$3</button>
+    <img src="https://subwaymenupedia.com/wp-content/uploads/2024/03/Meatball-Marinara-1.webp" alt="Meatball Marinara Subway">
+    <p>A subway sandwich</p>
+    <button value="7">$7</button>
+    <p>Or invest a custom amount of money</p>
+    <input type="number" id="money" min="1" max="100"/>
+</div>
 <script>
     async function fetchStockData() {
-        const ticker = document.getElementById('ticker').value.toUpperCase();
-        if (!ticker) {
-            alert("Please enter a ticker!");
-            return;
-        }
-
+        document.getElementById("start-button").style.visibility = "hidden";
+        document.getElementById("stock-info").style.visibility = "visible";
+        const lst = ['AMZN','MSFT','GOOG','AAPL','NVDA','META','NFLX','WMT','COST']
+        const rand = Math.floor(Math.random() * lst.length);
+        const ticker = lst[rand];
+        document.getElementById('ticker-display').textContent = ticker;
         const url = `https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/history?symbol=${ticker}&interval=1d&diffandsplits=false`;
         const options = {
             method: 'GET',
@@ -34,13 +76,20 @@
                 throw new Error('No data received for this ticker');
             }
 
+            const randomYear = Math.floor(Math.random() * (2024 - 2020 + 1)) + 2020;
+            document.getElementById('year-display').textContent = randomYear;
+
+            const datesInYear = Object.keys(items).filter(timestamp => {
+                const date = items[timestamp].date;
+                return date.endsWith(randomYear.toString());
+            });
+
             const dates = [];
             const opens = [];
             const closes = [];
 
             let tracker = 0;
-            const sortedDates = Object.keys(items).sort().reverse();
-            for (const date of sortedDates) {
+            for (const date of datesInYear) {
                 if (tracker === 7) {
                     break;
                 }
@@ -52,14 +101,76 @@
                 closes.push(item.close);
                 tracker++;
             }
-            dates.reverse();
-            opens.reverse();
-            closes.reverse();
-
+            document.getElementById("game-info").style.visibility = "visible";
+            visualizeStock(dates, opens, closes);
 
         } catch (error) {
             console.error(`Error fetching stock: ${error}`);
             alert(`Error fetching stock: ${error.message}`);
+        }
+        function visualizeStock(labels, opens, closes) {
+            const ctx = document.getElementById('stock').getContext('2d');
+
+            // Destroy existing chart
+            if (window.stockChart) window.stockChart.destroy();
+
+            window.stockChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Opening Price',
+                            data: opens,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Closing Price',
+                            data: closes,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    plugins: {
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                            },
+                            zoom: {
+                                wheel: {
+                                    enabled: true,
+                                },
+                                pinch: {
+                                    enabled: true
+                                },
+                                mode: 'xy',
+                            },
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Price (USD)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
         }
     }
 </script>

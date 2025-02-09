@@ -102,7 +102,6 @@
 
     }
     function visualizeStock(labels, opens, closes) {
-        if (labels && opens && opens.length > 0) {
             const ctx = document.getElementById('stock').getContext('2d');
 
             // Destroy existing chart
@@ -166,10 +165,6 @@
                 }
             });
         }
-    else {
-        return false;
-        }
-    }
 
     resetButton.addEventListener('click',resetGraph);
 </script>
