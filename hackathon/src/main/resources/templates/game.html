@@ -210,10 +210,36 @@
             alert(`Error fetching stock: ${error.message}`);
         }
 
-        async function updateBalance(username) {
+
+        //Grabs the current user logged in name to parse account details
+        async function getUsername() {
             try {
-                const response = await fetch(`api/money/balance?username=${username}`);
-                const json = await response.json();
+                const response = await fetch('/api/money/username');
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                const username = await response.text();
+                console.log("Logged in user:", username);
+                return username;
+            } catch (error) {
+                console.error(`Error fetching username: ${error}`);
+            }
+        }
+
+        //Get current user balance
+        async function updateBalance() {
+            try {
+                const username = await getUsername();
+                if (!username) {
+                    return;
+                }
+
+                const response = await fetch(`/api/money/balance?username=${username}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const balance = await response.json();
 
                 let balanceDisplay = document.getElementById('balance-display');
                 if (!balanceDisplay) {
@@ -221,11 +247,13 @@
                     balanceDisplay.id = 'balance-display';
                     document.getElementById("game-info").prepend(balanceDisplay);
                 }
-                balanceDisplay.textContent = `Current Balance: $${balanceDisplay.value}`
+
+                balanceDisplay.textContent = `Current Balance: $${balance}`;
             } catch (error) {
                 console.error(`Error fetching balance: ${error}`);
             }
         }
+
 
         function visualizeStock(labels, opens, closes) {
             const ctx = document.getElementById('stock').getContext('2d');

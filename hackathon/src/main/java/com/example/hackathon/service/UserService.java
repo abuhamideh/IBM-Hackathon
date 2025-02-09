@@ -29,6 +29,9 @@ public class UserService {
 
     public void addMoney(String username, int money) {
         User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found: " + username);
+        }
         user.setMoney(user.getMoney() + money);
         userRepository.save(user);
     }
@@ -49,4 +52,6 @@ public class UserService {
         return (user != null) ? user.getMoney() : 0;
 
     }
+
+
 }
