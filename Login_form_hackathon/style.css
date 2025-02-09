@@ -1,0 +1,23 @@
+#form{
+    width: 40%;
+    height: 450px ;
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column; 
+    margin: 14% 18% 18% 30%;
+}
+
+.input-group{
+    width: 140%;
+    margin-top: 4%;
+    
+}
+
+.form-select{
+    width: 140%;
+    margin-top: 4%;
+ 
+}
