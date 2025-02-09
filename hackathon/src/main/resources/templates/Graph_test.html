@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>S&P 500 Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/dist/chartjs-plugin-zoom.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+        #chart {
+            height: 90%;
+            width: 100%;
+        }
+        canvas {
+            height: 100% !important;
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+<h1>Graph Data</h1>
+<div id="input">
+    <label for="ticker">Enter Stock Ticker:</label>
+    <input type="text" id="ticker" placeholder="e.g., AAPL">
+    <button onclick="fetchStockData()">Get Data</button>
+</div>
+<div id="chart">
+    <canvas id="stock"></canvas>
+</div>
+<script>
+    async function fetchStockData() {
+        const ticker = document.getElementById('ticker').value.toUpperCase();
+        if (!ticker) {
+            alert("Please enter a ticker!");
+            return;
+        }
+
+        const url = `https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/history?symbol=${ticker}&interval=1d&diffandsplits=false`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '5271f027a1mshafaa054b903d680p14eae2jsnb72b85889940',
+                'x-rapidapi-host': 'yahoo-finance15.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const json = await response.json();
+
+            // Parse the response data
+            const items = json.body;
+            if (!items || Object.keys(items).length === 0) {
+                throw new Error('No data received for this ticker');
+            }
+
+            const dates = [];
+            const opens = [];
+            const closes = [];
+
+            let tracker = 0;
+            const sortedDates = Object.keys(items).sort().reverse();
+            for (const date of sortedDates) {
+                if (tracker === 7) {
+                    break;
+                }
+                const item = items[date];
+                const [day, month, year] = item.date.split('-');
+                const formattedDate = `${day}/${month}/${year}`;
+                dates.push(formattedDate);
+                opens.push(item.open);
+                closes.push(item.close);
+                tracker++;
+            }
+            dates.reverse();
+            opens.reverse();
+            closes.reverse();
+
+            // Visualize the data
+            visualizeStock(dates, opens, closes);
+        } catch (error) {
+            console.error(`Error fetching stock: ${error}`);
+            alert(`Error fetching stock: ${error.message}`);
+        }
+    }
+    function visualizeStock(labels, opens, closes) {
+        const ctx = document.getElementById('stock').getContext('2d');
+
+        // Destroy existing chart
+        if (window.stockChart) window.stockChart.destroy();
+
+        window.stockChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Opening Price',
+                        data: opens,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    },
+                    {
+                        label: 'Closing Price',
+                        data: closes,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                        },
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'xy',
+                        },
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Price (USD)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+</script>
+</body>
+</html>
