@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Gamified Investment</title>
-    <h1>Wow, look at those stock options</h1>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/dist/chartjs-plugin-zoom.min.js"></script>
     <style>
@@ -12,24 +11,112 @@
             padding: 0;
             height: 100%;
             width: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-left: 13px; /* Decreased by 7 pixels */
+            padding-bottom: 25px; /* Increased by 5 pixels */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
-        #chart {
-            height: 50%;
-            width: 50%;
+        #start-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        canvas {
-            height: 50%;
-            width: 50%;
+        #start-button:hover {
+            background-color: #0056b3;
         }
         #stock-info {
             visibility: hidden;
+            margin: 10px;
+        }
+        #chart {
+            height: 60%;
+            width: 80%;
+            margin: auto;
+        }
+        canvas {
+            height: 100%;
+            width: 100%;
         }
         #game-info {
             visibility: hidden;
+            margin: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .item {
+            margin: 10px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .reroll-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .reroll-button:hover {
+            background-color: #218838;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        p {
+            margin: 2px 0;
+        }
+        #game-info img {
+            display: block;
+            margin: 5px auto;
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+        }
+        #game-info button {
+            display: block;
+            margin: 5px auto;
+            padding: 10px 20px;
+            background-color: #ffc107;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #game-info button:hover {
+            background-color: #e0a800;
+        }
+        input[type="number"] {
+            display: block;
+            margin: 5px auto;
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .currency-symbol {
+            font-size: 2em;
+            text-align: center;
         }
     </style>
 </head>
 <body>
+<h1>Wow, look at those stock options</h1>
 <button id="start-button" onclick="fetchStockData()">Start Game</button>
 <div id="stock-info">
     <p>Random Stock: <span id="ticker-display"></span></p>
@@ -39,16 +126,23 @@
 <div id="chart">
     <canvas id="stock"></canvas>
 </div>
+<h2>How much do you want to invest?</h2>
 <div id="game-info">
-    <h2>How much do you want to invest?</h2>
-    <img src="https://media.istockphoto.com/id/1143290013/photo/coffee-cup-isolated.jpg?s=612x612&w=0&k=20&c=fEsmHH_kDh-vPxukZuaMs54D0kg2BTEDgS8lnWu8bBs=" alt="Coffee Cup">
-    <p>A cup of coffee</p>
-    <button value="3">$3</button>
-    <img src="https://subwaymenupedia.com/wp-content/uploads/2024/03/Meatball-Marinara-1.webp" alt="Meatball Marinara Subway">
-    <p>A subway sandwich</p>
-    <button value="7">$7</button>
-    <p>Or invest a custom amount of money</p>
-    <input type="number" id="money" min="1" max="100"/>
+    <div class="item">
+        <img src="https://media.istockphoto.com/id/1143290013/photo/coffee-cup-isolated.jpg?s=612x612&w=0&k=20&c=fEsmHH_kDh-vPxukZuaMs54D0kg2BTEDgS8lnWu8bBs=" alt="Coffee Cup">
+        <p>A cup of coffee</p>
+        <button value="3">$3</button>
+    </div>
+    <div class="item">
+        <img src="https://subwaymenupedia.com/wp-content/uploads/2024/03/Meatball-Marinara-1.webp" alt="Meatball Marinara Subway">
+        <p>A subway sandwich</p>
+        <button value="7">$7</button>
+    </div>
+    <div class="item">
+        <p>Or invest a custom amount of money</p>
+        <div class="currency-symbol">£</div>
+        <input type="number" id="money" min="1" max="100"/>
+    </div>
 </div>
 <script>
     async function fetchStockData() {
