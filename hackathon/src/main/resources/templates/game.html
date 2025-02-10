@@ -398,6 +398,17 @@
                 alert(`Your investment lost $${Math.abs(profitOrLoss).toFixed(2)}.`);
                 subtractBalance(Math.floor(Math.abs(profitOrLoss)));
             }
+
+            //Reset game
+            document.getElementById("start-button").style.visibility = "visible";
+            document.getElementById("stock-info").style.visibility = "hidden";
+            document.getElementById("game-info").style.visibility = "hidden";
+
+            document.getElementById("money").value = "";
+            let weekDisplay = document.getElementById('week-display');
+            weekDisplay.textContent = ``;
+
+            if (window.stockChart) window.stockChart.destroy();
         }
 
 
