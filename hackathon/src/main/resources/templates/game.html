@@ -148,10 +148,23 @@
         <div class="currency-symbol">$</div>
         <input type="number" id="money" min="1" max="1000"/>
     </div>
+    <div class="item">
+        <p>Select how many weeks you want to jump forward</p>
+        <input type="number" id="weeks" min="1" max="52"/>
+    </div>
+    <div class="item">
+        <button id="submit" type="submit">Calculate total</button>
+    </div>
+    <div class="item">
+        <button id="reset" type="reset">Reset Balance</button>
+    </div>
 </div>
 <script>
     async function fetchStockData() {
+        let tempBalance = 0;
+        let actualBalance = 0;
         document.getElementById("start-button").style.visibility = "hidden";
+        await updateBalance();
         document.getElementById("stock-info").style.visibility = "visible";
         const lst = ['AMZN','MSFT','GOOG','AAPL','NVDA','META','NFLX','WMT','COST']
         const rand = Math.floor(Math.random() * lst.length);
@@ -175,7 +188,7 @@
                 throw new Error('No data received for this ticker');
             }
 
-            const randomYear = Math.floor(Math.random() * (2024 - 2020 + 1)) + 2020;
+            const randomYear = Math.floor(Math.random() * (2023 - 2020 + 1)) + 2020;
             document.getElementById('year-display').textContent = randomYear;
 
             const datesInYear = Object.keys(items).filter(timestamp => {
@@ -208,7 +221,6 @@
             }
             document.getElementById("game-info").style.visibility = "visible";
             visualizeStock(dates, opens, closes);
-            await updateBalance("stackneo");
 
         } catch (error) {
             console.error(`Error fetching stock: ${error}`);
@@ -231,21 +243,35 @@
             }
         }
 
-        //Get current user balance
+        //Update user balance
         async function updateBalance() {
             try {
                 const username = await getUsername();
                 if (!username) {
                     return;
                 }
-
                 const response = await fetch(`/api/money/balance?username=${username}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                actualBalance = await response.json();
+                //Hacky solution should probably remove.
+                let balanceDisplay = document.getElementById('balance-display');
+                if (!balanceDisplay) {
+                    balanceDisplay = document.createElement('p');
+                    balanceDisplay.id = 'balance-display';
+                    document.getElementById("game-info").prepend(balanceDisplay);
+                    balanceDisplay.textContent = `Current Balance: $${actualBalance}`;
+                }
+                tempBalance = actualBalance;
+            } catch (error) {
+                console.error(`Error fetching balance: ${error}`);
+            }
+        }
 
-                const balance = await response.json();
-
+        //Display user balance
+        async function displayBalance(balance) {
+            try {
                 let balanceDisplay = document.getElementById('balance-display');
                 if (!balanceDisplay) {
                     balanceDisplay = document.createElement('p');
@@ -258,18 +284,29 @@
             } catch (error) {
                 console.error(`Error fetching balance: ${error}`);
             }
+
         }
 
         //TODO: Finish subtraction function
-        async function subtractBalance(money) {
-            try {
-                const username = await getUsername();
-                if (!username) {
-                    return;
+        async function subtractBalance(investedAmount) {
+            if (investedAmount > 0) {
+                try {
+                    const username = await getUsername();
+                    if (!username) {
+                        return;
+                    }
+                    const subtract = await fetch(`/api/money/subtract?username=${username}?money=${investedAmount}`);
+                    if (!subtract.ok) {
+                        throw new Error(`HTTP error: ${subtract.statusText}`);
+                    }
+                    actualBalance = tempBalance;
+                    alert(```Investment of ${investedAmount} submitted`);
+                } catch (error) {
+                    console.error(`Error fetching subtract: ${error}`);
                 }
-                const subtract = await fetch('/api/money/subtract?username=${username}?money=${money}');
-            } catch (error) {
-                console.error(`Error fetching subtract: ${error}`);
+            }
+            else {
+                alert("No funds invested.")
             }
         }
 
@@ -280,10 +317,14 @@
                 if (!username) {
                     return;
                 }
-                const subtract = await fetch('/api/money/add?username=${username}?money=${money}');
+                const subtract = await fetch(`/api/money/add?username=${username}?money=${money}`);
             } catch (error) {
                 console.error(`Error fetching add: ${error}`);
             }
+        }
+
+        function calculateStocks(balance) {
+
         }
 
 
@@ -351,6 +392,46 @@
                 }
             });
         }
+
+        //Undo all temp changes
+        document.getElementById("reset").addEventListener("click", () => {
+            tempBalance = actualBalance;
+            document.getElementById("money").value = "";
+            document.getElementById("weeks").value = "";
+            displayBalance(tempBalance);
+        });
+
+        //Handle custom money investment
+        document.getElementById("money").addEventListener("input", function() {
+            const amount = parseFloat(this.value);
+            if (!isNaN(amount) && amount >= 1 && amount <= 1000) {
+                if (tempBalance >= amount) {
+                    tempBalance -= amount;
+                    displayBalance(tempBalance);
+                } else {
+                    alert("Not enough funds!");
+                    this.value = "";
+                }
+            }
+        });
+
+        //Handle individual item investment
+        document.querySelectorAll("#game-info button[value]").forEach(button => {
+            button.addEventListener("click", () => {
+                const amount = parseFloat(button.value);
+                if (tempBalance >= amount) {
+                    tempBalance -= amount;
+                    displayBalance(tempBalance);
+                } else {
+                    alert("Not enough funds for this investment!");
+                }
+            });
+        });
+
+        //Confirm investment
+        document.getElementById("submit").addEventListener("click", async () => {
+            await subtractBalance(actualBalance-tempBalance);
+        })
     }
 </script>
 </body>
