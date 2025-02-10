@@ -168,7 +168,7 @@
         document.getElementById("start-button").style.visibility = "hidden";
         await updateBalance();
         document.getElementById("stock-info").style.visibility = "visible";
-        const lst = ['AMZN','MSFT','GOOG','AAPL','NVDA','META','NFLX','WMT','COST']
+        const lst = ['AMZN', 'MSFT', 'GOOG', 'AAPL', 'NVDA', 'META', 'NFLX', 'WMT', 'COST']
         const rand = Math.floor(Math.random() * lst.length);
         const ticker = lst[rand];
         document.getElementById('ticker-display').textContent = ticker;
@@ -184,6 +184,7 @@
         try {
             const response = await fetch(url, options);
             const json = await response.json();
+            localStorage.setItem('stockApiResponse', JSON.stringify(json));
 
             const items = json.body;
             if (!items || Object.keys(items).length === 0) {
@@ -238,7 +239,6 @@
                     throw new Error(response.statusText);
                 }
                 const username = await response.text();
-                console.log("Logged in user:", username);
                 return username;
             } catch (error) {
                 console.error(`Error fetching username: ${error}`);
@@ -318,12 +318,10 @@
                         throw new Error(`HTTP error: ${subtract.statusText}`);
                     }
                     actualBalance = tempBalance;
-                    alert(`Investment of $${investedAmount} submitted`);
                 } catch (error) {
                     console.error(`Error fetching subtract: ${error}`);
                 }
-            }
-            else {
+            } else {
                 alert("No funds invested.")
             }
         }
@@ -347,8 +345,59 @@
             }
         }
 
-        function calculateStocks(balance) {
+        function calculateStocks(balance, weeks) {
+            if (balance === 0) {
+                alert("No funds to invest");
+                return;
+            } else if (weeks === 0) {
+                alert("Select weeks to invest");
+                return;
+            }
 
+            const { dates, closes } = window.stockData;
+            const initialDate = dates[dates.length - 1];
+            const initialPrice = closes[closes.length - 1];
+
+            // Parse the initial date
+            const [initialDay, initialMonth, initialYear] = initialDate.split("/").map(Number);
+            const initialDateObj = new Date(initialYear, initialMonth - 1, initialDay);
+
+            // Calculate future date
+            const futureDateObj = new Date(initialDateObj);
+            futureDateObj.setDate(futureDateObj.getDate() + (weeks * 7));
+
+            // Format future date to match API date format
+            const futureYear = futureDateObj.getFullYear();
+            const futureMonth = String(futureDateObj.getMonth() + 1).padStart(2, '0');
+            const futureDay = String(futureDateObj.getDate()).padStart(2, '0');
+            const futureDateStr = `${futureDay}-${futureMonth}-${futureYear}`;
+
+            // Search in the full API response JSON
+            const items = JSON.parse(localStorage.getItem('stockApiResponse')).body;
+
+            let futurePrice = null;
+            for (const timestamp in items) {
+                const item = items[timestamp];
+                if (item.date === futureDateStr) {
+                    futurePrice = item.close;
+                    break;
+                }
+            }
+
+            if (futurePrice === null) {
+                alert("Could not find a price for the specified future date.");
+                return;
+            }
+
+            const profitOrLoss = ((futurePrice - initialPrice) / initialPrice) * balance;
+
+            if (profitOrLoss > 0) {
+                alert(`Congratulations! Your investment grew by $${profitOrLoss.toFixed(2)}.`);
+                addBalance(Math.floor(profitOrLoss));
+            } else {
+                alert(`Your investment lost $${Math.abs(profitOrLoss).toFixed(2)}.`);
+                subtractBalance(Math.floor(Math.abs(profitOrLoss)));
+            }
         }
 
 
@@ -428,7 +477,7 @@
         });
 
         //Handle custom money investment
-        document.getElementById("money").addEventListener("keyup", function(e) {
+        document.getElementById("money").addEventListener("keyup", function (e) {
             if (e.keyCode === 13 || e.key === 'Enter') {
                 const amount = parseFloat(this.value);
                 if (!isNaN(amount) && amount >= 1 && amount <= 1000) {
@@ -444,15 +493,14 @@
         });
 
         //Calculate weeks
-        document.getElementById("weeks").addEventListener("keyup", function(e) {
+        document.getElementById("weeks").addEventListener("keyup", function (e) {
             if (e.keyCode === 13 || e.key === 'Enter') {
                 const weeks = parseFloat(this.value);
                 if (!isNaN(weeks) && weeks >= 1 && weeks <= 52) {
                     tempWeeks = weeks;
                     displayWeeks(tempWeeks);
 
-                }
-                else {
+                } else {
                     alert("You can only invest up until a year (52 weeks)");
                     this.value = "";
                 }
@@ -474,10 +522,8 @@
 
         //Confirm investment
         document.getElementById("submit").addEventListener("click", async () => {
-            await subtractBalance(actualBalance-tempBalance);
-        })
-
-
+            calculateStocks(tempBalance, tempWeeks);
+        });
     }
 </script>
 </body>
