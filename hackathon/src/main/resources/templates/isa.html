@@ -1,13 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ISA Account</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIVest</title>
+  <link rel = "icon" href="https://github.com/abuhamideh/IBM-Hackathon/blob/frontend/AIVerse.jpg?raw=true" type = "image/x-icon" />
+  <style>body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .body-animate{
+    width: 200%;
+    height: 200%;
+    background-size: 400% 400%;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .container {
+    color: white;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0.8;
+  }
+
+  nav {
+    background-color: #000000;
+    font-weight: bold;
+    font-size: 20px;
+    overflow: hidden;
+    height: 100%;
+    font-weight: bold;
+  }
+
+  nav a {
+    float: left;
+    display: flex;
+    justify-content: right;
+    color: white;
+    text-align: center;
+    padding: 20px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+
+  }
+  nav a:hover {
+    background-color: #ffffff;
+    color: #1E90FF;
+  }
+
+  .heading-title{
+    font-size: 6rem;
+    margin-top: -1rem;
+    transform: translate(0px,60px);
+    text-align: center;
+    letter-spacing: 3px;
+    color: white;
+    width: 99%;
+  }
+
+
+  .info-button{
+    font-size: 3rem;
+    padding: 3.5rem;
+    display: inline-block;
+    margin: 10px 0;
+    background-color: #1E90FF;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.3s;
+    height: 100%;
+    width: 40%;
+  }
+
+  *{text-align: center;
+  }
+  p{
+    font-size: small;
+  }
+  a{
+    font-size: small;
+  }
+  section{
+    display: inline-block;
+    background-color: rgba(161, 162, 164, 0.901);
+    padding: 50px;
+    width: 30%;
+  }
+
+  .align-button {
+    margin: 20px 0;
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    transform: translate(100px);
+  }
+
+
+  .animate-button{
+    margin: 10px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+    background-color: #171717;
+    font-size: 3rem;
+    padding: 2rem 1rem;
+    border: none;
+    border-radius: 1.5rem;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    height: 100%;
+    width: 40%;
+    transition: background-color 0.4s, transform 0.4s;
+  }
+
+  button span:not(:nth-child(6)) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 110px;
+    width: 300px;
+    background-color: #0c66ed;
+    border-radius: 50%;
+    transition: .2s ease;
+  }
+
+  button span:nth-child(1) {
+    transform: translate(-3.3em, -4em);
+  }
+
+  button span:nth-child(2) {
+    transform: translate(-6em, 1.3em);
+  }
+
+  button span:nth-child(3) {
+    transform: translate(-.2em, 1.8em);
+  }
+
+  button span:nth-child(4) {
+    transform: translate(3.5em, 1.4em);
+  }
+
+  button span:nth-child(5) {
+    transform: translate(5em, -5em);
+  }
+
+  button span:nth-child(6) {
+    position: relative;
+  }
+
+  button:hover span:not(:nth-child(6)) {
+    transform: translate(-50%, -50%) scale(4);
+    transition: 1.5s ease;
+  }
+
+  @media screen and (max-width: 1024px) {
+    #main-line{
+      font-size: 1.5rem;
+      margin-top: 50px;
+    }
+    .heading-title{
+      font-size: 4.5rem;
+    }
+    .align-button{
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+    }
+    .text{
+      font-size: 30px;
+    }
+    nav {
+      width: auto;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    nav a {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .heading-title{
+      font-size: 3rem;
+    }
+    .main-line{
+      font-size: 120%;
+    }
+    .align-button{
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-content: start;
+    }
+    .text{
+      font-size: 20px;
+    }
+    nav {
+      width: auto;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    nav a {
+      padding: 12px;
+      font-size: 12px;
+    }
+  }
+  </style>
 </head>
-<body>
-<h1>Welcome to your ISA account!</h1>
-<a href="/graphs">Graphs</a>
-<a href="/game">Gamified Investment</a>
+<body class="body-animate">
+<nav>
+  <a href="/investment">Home</a>
+  <a href="/game">InvestiGraph</a>
+  <a href="/register">Registration</a>
+  <a href="/logout">Logout</a>
+  <div>
+    <img src="https://github.com/abuhamideh/IBM-Hackathon/blob/frontend/AIVerse.jpg?raw=true" width="80px" height="58px" style="float:right; transform:translate(-10px,2px)">
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="heading-title">Welcome to your AIVest ISA Account</h1>
+  <p id="main-line" style="font-size: 2rem; font-weight:bold">Save Small | Grow Big | Invest Daily</p>
+</div>
+<br>
+<br>
+
+<div class="align-button">
+  <button class = "animate-button" onclick="location.href = 'login.html'">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span class="text">Login</span>
+  </button>
+  <button class="animate-button" onclick="location.href = 'AI.html'">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span class="text">InvestiGraph</span>
+  </button>
+</div>
+</body>
 <script>
   window.watsonAssistantChatOptions = {
     integrationID: "aea66e8c-ef91-411c-b108-02ef0ca4411c", // The ID of this integration.
@@ -21,5 +290,4 @@
     document.head.appendChild(t);
   });
 </script>
-</body>
 </html>
