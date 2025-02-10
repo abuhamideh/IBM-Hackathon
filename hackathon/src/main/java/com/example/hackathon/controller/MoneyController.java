@@ -15,13 +15,13 @@ public class MoneyController {
         this.userService = userService;
     }
 
-    @PostMapping("/add")
+    @GetMapping("/add")
     public String addMoney(@RequestParam String username, @RequestParam int money) {
         userService.addMoney(username, money);
         return "success";
     }
 
-    @PostMapping("/subtract")
+    @GetMapping("/subtract")
     public String subtractMoney(@RequestParam String username, @RequestParam int money) {
         userService.subtractMoney(username, money);
         return "success";

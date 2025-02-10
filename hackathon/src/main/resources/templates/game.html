@@ -287,7 +287,7 @@
 
         }
 
-        //TODO: Finish subtraction function
+        //Subtracts money from user account
         async function subtractBalance(investedAmount) {
             if (investedAmount > 0) {
                 try {
@@ -295,12 +295,12 @@
                     if (!username) {
                         return;
                     }
-                    const subtract = await fetch(`/api/money/subtract?username=${username}?money=${investedAmount}`);
+                    const subtract = await fetch(`/api/money/subtract?username=${username}&money=${investedAmount}`);
                     if (!subtract.ok) {
                         throw new Error(`HTTP error: ${subtract.statusText}`);
                     }
                     actualBalance = tempBalance;
-                    alert(```Investment of ${investedAmount} submitted`);
+                    alert(`Investment of $${investedAmount} submitted`);
                 } catch (error) {
                     console.error(`Error fetching subtract: ${error}`);
                 }
@@ -310,14 +310,20 @@
             }
         }
 
-        //TODO: Finish addition function
-        async function addBalance(money) {
+        //Adds money to user account
+        async function addBalance(investedAmount) {
             try {
                 const username = await getUsername();
                 if (!username) {
                     return;
                 }
-                const subtract = await fetch(`/api/money/add?username=${username}?money=${money}`);
+                const addition = await fetch(`/api/money/add?username=${username}&money=${investedAmount}`);
+                if (!addition.ok) {
+                    throw new Error(`HTTP error: ${addition.statusText}`);
+                }
+                //TODO: Recalculate to actual investment
+                actualBalance += investedAmount;
+                alert("Added money to user account")
             } catch (error) {
                 console.error(`Error fetching add: ${error}`);
             }
