@@ -6,35 +6,72 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/dist/chartjs-plugin-zoom.min.js"></script>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-        }
-        #chart {
-            height: 90%;
-            width: 100%;
-        }
-        canvas {
-            height: 100% !important;
-            width: 100% !important;
-        }
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        text-align: center;
+        padding: 20px;
+    }
+    #chart-container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    canvas {
+        width: 100% !important;
+        height: 400px !important;
+    }
+    button {
+        padding: 10px 15px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #fetch-button {
+        background-color: #007bff;
+        color: white;
+    }
+    #fetch-button:hover {
+        background-color: #0056b3;
+    }
+    #reset-button {
+        background-color: #dc3545;
+        color: white;
+    }
+    #reset-button:hover {
+        background-color: #c82333;
+    }
+    input {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
     </style>
 </head>
 <body>
 <h1>Graph Data</h1>
+<h3>Grabs the last 7 days of stock data from any stock of your choice!</h3>
 <div id="input">
     <label for="ticker">Enter Stock Ticker:</label>
     <input type="text" id="ticker" placeholder="e.g., AAPL">
-    <button onclick="fetchStockData()">Get Data</button>
-    <button id="reset">Reset Graph</button>
+    <button id="fetch-button" onclick="fetchStockData()">Get Data</button>
+    <button id="reset-button" onclick="resetGraph()">Reset Graph</button>
 </div>
-<div id="chart">
+<div id="chart-container">
     <canvas id="stock"></canvas>
 </div>
 <script>
-    const resetButton = document.getElementById('reset');
     async function fetchStockData() {
         const ticker = document.getElementById('ticker').value.toUpperCase();
         if (!ticker) {
@@ -165,8 +202,6 @@
                 }
             });
         }
-
-    resetButton.addEventListener('click',resetGraph);
 </script>
 </body>
 </html>
