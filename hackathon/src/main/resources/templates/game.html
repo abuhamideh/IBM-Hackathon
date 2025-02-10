@@ -350,7 +350,7 @@
 
         function calculateStocks(balance, weeks) {
             if (balance === 0) {
-                alert("No funds to invest");
+                alert("It's not wise to go all in on one stock...");
                 return;
             } else if (weeks === 0) {
                 alert("Select weeks to invest");
@@ -488,8 +488,7 @@
         });
 
         //Handle custom money investment
-        document.getElementById("money").addEventListener("keyup", function (e) {
-            if (e.keyCode === 13 || e.key === 'Enter') {
+        document.getElementById("money").addEventListener("change", function (e) {
                 const amount = parseFloat(this.value);
                 if (!isNaN(amount) && amount >= 1 && amount <= 1000) {
                     if (tempBalance >= amount) {
@@ -500,22 +499,18 @@
                         this.value = "";
                     }
                 }
-            }
         });
 
         //Calculate weeks
-        document.getElementById("weeks").addEventListener("keyup", function (e) {
-            if (e.keyCode === 13 || e.key === 'Enter') {
+        document.getElementById("weeks").addEventListener("change", function (e) {
                 const weeks = parseFloat(this.value);
                 if (!isNaN(weeks) && weeks >= 1 && weeks <= 52) {
                     tempWeeks = weeks;
                     displayWeeks(tempWeeks);
-
                 } else {
                     alert("You can only invest up until a year (52 weeks)");
                     this.value = "";
                 }
-            }
         })
 
         //Handle individual item investment
