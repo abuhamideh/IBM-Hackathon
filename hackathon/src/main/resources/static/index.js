@@ -252,11 +252,15 @@ async function addBalance(investedAmount) {
 
 // Calculate stock returns
 function calculateStocks(balance, weeks) {
+    const investedAmount = actualBalance - balance;
     if (balance === 0) {
         alert("It's not wise to go all in on one stock...");
         return;
     } else if (weeks === 0) {
         alert("Select weeks to invest");
+        return;
+    } else if (investedAmount === 0) {
+        alert("Please invest some money in first")
         return;
     }
 
@@ -302,7 +306,7 @@ function calculateStocks(balance, weeks) {
 // Ensure event listeners are added only once
 document.getElementById("reset").addEventListener("click", () => {
     tempBalance = actualBalance;
-    tempWeeks = actualWeeks;
+    tempWeeks = 0;
     document.getElementById("money").value = "";
     document.getElementById("weeks").value = "";
     displayBalance(tempBalance);
