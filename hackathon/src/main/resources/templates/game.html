@@ -163,6 +163,8 @@
     async function fetchStockData() {
         let tempBalance = 0;
         let actualBalance = 0;
+        let tempWeeks = 0;
+        let actualWeeks = 0;
         document.getElementById("start-button").style.visibility = "hidden";
         await updateBalance();
         document.getElementById("stock-info").style.visibility = "visible";
@@ -287,6 +289,22 @@
 
         }
 
+        async function displayWeeks(weeks) {
+            try {
+                let weekDisplay = document.getElementById('week-display');
+                if (!weekDisplay) {
+                    weekDisplay = document.createElement('p');
+                    weekDisplay.id = 'week-display';
+                    document.getElementById("game-info").prepend(weekDisplay);
+                }
+
+                weekDisplay.textContent = `Weeks: ${weeks}`;
+            } catch (error) {
+                console.error(`Error fetching balance: ${error}`);
+            }
+
+        }
+
         //Subtracts money from user account
         async function subtractBalance(investedAmount) {
             if (investedAmount > 0) {
@@ -402,24 +420,44 @@
         //Undo all temp changes
         document.getElementById("reset").addEventListener("click", () => {
             tempBalance = actualBalance;
+            tempWeeks = actualWeeks;
             document.getElementById("money").value = "";
             document.getElementById("weeks").value = "";
             displayBalance(tempBalance);
+            displayWeeks(tempWeeks);
         });
 
         //Handle custom money investment
-        document.getElementById("money").addEventListener("input", function() {
-            const amount = parseFloat(this.value);
-            if (!isNaN(amount) && amount >= 1 && amount <= 1000) {
-                if (tempBalance >= amount) {
-                    tempBalance -= amount;
-                    displayBalance(tempBalance);
-                } else {
-                    alert("Not enough funds!");
-                    this.value = "";
+        document.getElementById("money").addEventListener("keyup", function(e) {
+            if (e.keyCode === 13 || e.key === 'Enter') {
+                const amount = parseFloat(this.value);
+                if (!isNaN(amount) && amount >= 1 && amount <= 1000) {
+                    if (tempBalance >= amount) {
+                        tempBalance -= amount;
+                        displayBalance(tempBalance);
+                    } else {
+                        alert("Not enough funds!");
+                        this.value = "";
+                    }
                 }
             }
         });
+
+        //Calculate weeks
+        document.getElementById("weeks").addEventListener("keyup", function(e) {
+            if (e.keyCode === 13 || e.key === 'Enter') {
+                const weeks = parseFloat(this.value);
+                if (!isNaN(weeks) && weeks >= 1 && weeks <= 52) {
+                    tempWeeks = weeks;
+                    displayWeeks(tempWeeks);
+
+                }
+                else {
+                    alert("You can only invest up until a year (52 weeks)");
+                    this.value = "";
+                }
+            }
+        })
 
         //Handle individual item investment
         document.querySelectorAll("#game-info button[value]").forEach(button => {
@@ -438,6 +476,8 @@
         document.getElementById("submit").addEventListener("click", async () => {
             await subtractBalance(actualBalance-tempBalance);
         })
+
+
     }
 </script>
 </body>
