@@ -55,6 +55,7 @@ async function fetchStockData() {
         }
 
         window.stockData = { dates, opens, closes };
+        document.getElementById('game-title').style.visibility = "visible";
         document.getElementById("game-info").style.visibility = "visible";
         visualizeStock(dates, opens, closes);
 
@@ -137,6 +138,7 @@ function resetGameState() {
 
     document.getElementById("start-button").style.visibility = "visible";
     document.getElementById("stock-info").style.visibility = "hidden";
+    document.getElementById("game-title").style.visibility = "hidden";
     document.getElementById("game-info").style.visibility = "hidden";
 
     if (window.stockChart) window.stockChart.destroy();
