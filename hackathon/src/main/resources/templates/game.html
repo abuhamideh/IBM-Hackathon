@@ -14,9 +14,9 @@
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
             color: #333;
-            padding-left: 13px; /* Decreased by 7 pixels */
-            padding-bottom: 25px; /* Increased by 5 pixels */
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            padding-left: 13px; 
+            padding-bottom: 25px; 
+            overflow-x: hidden; 
         }
         #start-button {
             display: inline-block;
@@ -113,10 +113,35 @@
             font-size: 2em;
             text-align: center;
         }
+        h1, p {
+    text-align: center;
+}
+#stock-info {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Adjusts the space between the items */
+}
+
+#stock-info p, .reroll-button {
+    background-color: lightgray; /* Adjust the color to your liking */
+    border: 1px solid gray;
+    padding: 1rem;
+    border-radius: 50px; /* This gives the bubble effect */
+    text-align: center;
+    color: black;
+}
+#start-button {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    margin: 20px auto 0;
+}
+
     </style>
 </head>
 <body>
-<h1>Wow, look at those stock options</h1>
+<h1>InvestiGraph</h1>
+<p>Our game will allow you to train in investing using easy, simple to understand metrics and a plethora of historical data.</p>
 <button id="start-button" onclick="fetchStockData()">Start Game</button>
 <div id="stock-info">
     <p>Random Stock: <span id="ticker-display"></span></p>
