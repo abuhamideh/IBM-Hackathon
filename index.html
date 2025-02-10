@@ -1,58 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moneybanks</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- <header>
-        Welcome to Moneybanks
-    </header> -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIVest</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel = "icon" href="AIVerse.jpg" type = "image/x-icon" />
+  </head>
+  <body class="body-animate">
     <nav>
-        <a href="#home">Home</a>
-        <a href="#services">Services</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#login">Login</a>
-    </nav>
-    <div class="container">
-
-        <h1 class = "heading-title"> Welcome to AIVest</h1>
-        <p style="font-size: 2rem;"> Save Small | Grow Big | Invest Daily </p>
-
-        <div class="content">
-            <h2>Our Services</h2>
-            <p>Explore the investment options we offer and secure your financial future.</p>
-            <button class="button" onclick="showAlert()">Learn More</button>
-            <button class="button" onclick="redirectToContact()">Contact Us</button>
-            <button class="button" onclick="useAI()">Use AI</button>
-            <button class="button" onclick="seeGraph()">See Graph</button>
+        <a href="index.html">Home</a>
+        <a href="AI.html">InvestiGraph</a> 
+        <a href="registration.html">Registration</a>
+        <a href="login.html">Login</a>
+        <div>
+            <img src="AIVerse.jpg" width="80px" height="58px" style="float:right; transform:translate(-10px,2px)">
         </div>
+    </nav>  
+    
+    <div class="container">
+      <h1 class="heading-title">Welcome to AIVest</h1>
+      <p id="main-line" style="font-size: 2rem; font-weight:bold">Save Small | Grow Big | Invest Daily</p>
     </div>
+    <br>
+    <br>
 
+    <div class="align-button">
+        <button class = "animate-button" onclick="location.href = 'login.html'">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span class="text">Login</span>
+        </button>
+        <button class="animate-button" onclick="location.href = 'AI.html'">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span class="text">InvestiGraph</span>
+        </button>
+    </div>
     <div>
-        <button class = "ai-button" >AI chatbot</button>
+      <button class="ai-button">AI </button>
     </div>
 
-
-
-    <script>
-        function showAlert() {
-            alert("Discover more about our investment plans!");
-        }
-
-        function redirectToContact() {
-            window.location.href = "#contact";
-        }
-
-        function useAI() {
-            alert("AI feature coming soon!");
-        }
-
-        function seeGraph() {
-            alert("Graph feature coming soon!");
-        }
-    </script>
-</body>
+  </body>
 </html>
