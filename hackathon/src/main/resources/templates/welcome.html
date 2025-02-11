@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body>
+<h1>Successful login woooo!</h1>
+<a href="/graphs">Graphs</a>
+<script>
+window.watsonAssistantChatOptions = {
+integrationID: "aea66e8c-ef91-411c-b108-02ef0ca4411c", // The ID of this integration.
+region: "au-syd", // The region your integration is hosted in.
+serviceInstanceID: "dfb34ef0-d1fb-4699-aec4-642ac80f33e6", // The ID of your service instance.
+onLoad: async (instance) => { await instance.render(); }
+};
+setTimeout(function(){
+const t=document.createElement('script');
+t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+document.head.appendChild(t);
+});
+</script>
+</body>
+</html>

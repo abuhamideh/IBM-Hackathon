@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>S&P 500 Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.2.0/dist/chartjs-plugin-zoom.min.js"></script>
+    <style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        text-align: center;
+        overflow: hidden;
+    }
+    #chart-container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    canvas {
+        width: 100% !important;
+        height: 400px !important;
+    }
+    button {
+        padding: 10px 15px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #fetch-button {
+        background-color: #007bff;
+        color: white;
+    }
+    #fetch-button:hover {
+        background-color: #0056b3;
+    }
+    #reset-button {
+        background-color: #dc3545;
+        color: white;
+    }
+    #reset-button:hover {
+        background-color: #c82333;
+    }
+    input {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    </style>
+</head>
+<body>
+<h1>Stock Plotter</h1>
+<p>Grabs the last 7 days of stock data from any stock of your choice!</p>
+<div id="input">
+    <label for="ticker">Enter Stock Ticker:</label>
+    <input type="text" id="ticker" placeholder="e.g., AAPL">
+    <button id="fetch-button" onclick="fetchStockData()">Get Data</button>
+    <button id="reset-button" onclick="resetGraph()">Reset Graph</button>
+</div>
+<div id="chart-container">
+    <canvas id="stock"></canvas>
+</div>
+<script>
+    async function fetchStockData() {
+        const ticker = document.getElementById('ticker').value.toUpperCase();
+        if (!ticker) {
+            alert("Please enter a ticker!");
+            return;
+        }
+
+        const url = `https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/history?symbol=${ticker}&interval=1d&diffandsplits=false`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '5271f027a1mshafaa054b903d680p14eae2jsnb72b85889940',
+                'x-rapidapi-host': 'yahoo-finance15.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const json = await response.json();
+
+            // Parse the response data
+            const items = json.body;
+            if (!items || Object.keys(items).length === 0) {
+                throw new Error('No data received for this ticker');
+            }
+
+            const dates = [];
+            const opens = [];
+            const closes = [];
+
+            let tracker = 0;
+            const sortedDates = Object.keys(items).sort().reverse();
+            for (const date of sortedDates) {
+                if (tracker === 7) {
+                    break;
+                }
+                const item = items[date];
+                const [day, month, year] = item.date.split('-');
+                const formattedDate = `${day}/${month}/${year}`;
+                dates.push(formattedDate);
+                opens.push(item.open);
+                closes.push(item.close);
+                tracker++;
+            }
+            dates.reverse();
+            opens.reverse();
+            closes.reverse();
+
+            // Visualize the data
+            visualizeStock(dates, opens, closes);
+        } catch (error) {
+            console.error(`Error fetching stock: ${error}`);
+            alert(`Error fetching stock: ${error.message}`);
+        }
+    }
+
+    function resetGraph() {
+        if (window.stockChart) {
+            window.stockChart.destroy();
+            window.stockChart = null;
+        }
+        else {
+            alert("No graph to reset!")
+        }
+
+    }
+    function visualizeStock(labels, opens, closes) {
+            const ctx = document.getElementById('stock').getContext('2d');
+
+            // Destroy existing chart
+            if (window.stockChart) window.stockChart.destroy();
+
+            window.stockChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Opening Price',
+                            data: opens,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Closing Price',
+                            data: closes,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    plugins: {
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                            },
+                            zoom: {
+                                wheel: {
+                                    enabled: true,
+                                },
+                                pinch: {
+                                    enabled: true
+                                },
+                                mode: 'xy',
+                            },
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Price (USD)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+    window.watsonAssistantChatOptions = {
+        integrationID: "aea66e8c-ef91-411c-b108-02ef0ca4411c", // The ID of this integration.
+        region: "au-syd", // The region your integration is hosted in.
+        serviceInstanceID: "dfb34ef0-d1fb-4699-aec4-642ac80f33e6", // The ID of your service instance.
+        onLoad: async (instance) => { await instance.render(); }
+    };
+    setTimeout(function(){
+        const t=document.createElement('script');
+        t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+        document.head.appendChild(t);
+    });
+</script>
+</body>
+</html>
