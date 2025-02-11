@@ -290,14 +290,19 @@ function calculateStocks(balance, weeks) {
     }
 
     console.log(`Future Date: ${futureDateStr}, Future Price: $${futurePrice}`);
-    const profitOrLoss = ((futurePrice - initialPrice) / initialPrice) * balance;
+    // Calculate percentage change
+    const percentageChange = (futurePrice - initialPrice) / initialPrice;
+
+    // Calculate actual profit/loss based on invested amount
+    const profitOrLoss = investedAmount * percentageChange;
 
     if (profitOrLoss > 0) {
-        alert(`Congratulations! Your investment grew by $${profitOrLoss.toFixed(2)}.`);
-            addBalance(Math.floor(profitOrLoss));
+        alert(`Congratulations! Your closing price of $${initialPrice.toFixed(2)} grew to $${futurePrice.toFixed(2)} (${(percentageChange * 100).toFixed(2)}% gain). You made $${profitOrLoss.toFixed(2)} on your $${investedAmount.toFixed(2)} investment.`);
+        addBalance(Math.round(profitOrLoss));
     } else {
-        alert(`Your investment lost $${Math.abs(profitOrLoss).toFixed(2)}.`);
-            subtractBalance(Math.floor(Math.abs(profitOrLoss)));
+        const loss = Math.abs(profitOrLoss);
+        alert(`Oh no! Your closing price of $${initialPrice.toFixed(2)} fell to $${futurePrice.toFixed(2)} (${(percentageChange * 100).toFixed(2)}% loss). You lost $${loss.toFixed(2)} on your $${investedAmount.toFixed(2)} investment.`);
+        subtractBalance(Math.round(loss));
     }
 
     resetGameState();
