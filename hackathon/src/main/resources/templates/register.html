@@ -229,7 +229,7 @@
                 <label class="form-check-label" for="investmentType2" style="color: white">Investment</label>
             </div>
         </div>
-        <button type="submit">
+        <button onclick="checkPassword()" type="submit">
             <span></span>
             <span></span>
             <span></span>
@@ -242,5 +242,17 @@
         <a href="/login" class="text-decoration-none">Already have an account? Login</a>
     </div>
 </div>
+<script>
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    function checkPassword() {
+        if (password.value !== confirmPassword.value) {
+            alert("Passwords do not match.");
+            confirmPassword.value = "";
+        }
+    }
+
+</script>
 </body>
 </html>
