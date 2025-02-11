@@ -182,55 +182,62 @@
             }
         }</style>
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100" style="background-color: #282c34;">
-<nav class="position-absolute top-0 start-0 w-100 d-flex justify-content-between p-3 bg-dark">
-    <div>
-        <a class="text-white text-decoration-none mx-2" href="/register">Registration</a>
-        <a class="text-white text-decoration-none mx-2" href="/login">Login</a>
-    </div>
-    <img src="https://github.com/abuhamideh/IBM-Hackathon/blob/frontend/AIVerse.jpg?raw=true" width="80" height="58" class="rounded" />
-</nav>
+<body class="body-animate">
+    <nav>
+        <div>
+            <a  href="/register">Registration</a>
+            <a  href="/login">Login</a>
+        </div>
+        <img src="https://github.com/abuhamideh/IBM-Hackathon/blob/frontend/AIVerse.jpg?raw=true" width="80" height="58" class="rounded" style="float:right; transform:translate(-10px,2px)" />
+    </nav>
 
-<div class="card p-4 shadow-lg" style="width: 24rem; background-color: #fff; border-radius: 10px;">
-    <h2 class="text-center mb-4">Registration Form</h2>
+<div class="card p-4 shadow-lg" style="width: 24rem; background-color: rgb(0, 0, 0); border-radius: 10px;  align-items: center; justify-content: center; flex-direction: column; margin: 5% auto; padding: 20px;text-align: center;">
+    <h2 class="text-center mb-4" style="color: white;">Registration Form</h2>
     <form action="/register" method="post">
         <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label" style="color: white">Username</label>
             <div class="input-group">
                 <span class="input-group-text">@</span>
                 <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required>
             </div>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label" style="color: white">Password</label>
             <div class="input-group">
                 <span class="input-group-text">*</span>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
             </div>
         </div>
         <div class="mb-3">
-            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <label for="confirmPassword" class="form-label" style="color: white">Confirm Password</label>
             <div class="input-group">
                 <span class="input-group-text">*</span>
                 <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm password" required>
             </div>
         </div>
         <div class="mb-3">
-            <label for="fullName" class="form-label">Full Name</label>
+            <label for="fullName" class="form-label" style="color: white">Full Name</label>
             <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter full name" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Investment Type</label>
+            <label class="form-label" style="color: white">Investment Type</label>
             <div class="form-check">
                 <input class="form-check-input" type="radio" id="investmentType" name="investmentType" value="isa" required>
-                <label class="form-check-label" for="investmentType">Individual Saving Account (ISA)</label>
+                <label class="form-check-label" for="investmentType" style="color: white">Individual Saving Account (ISA)</label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" id="investmentType2" name="investmentType" value="investment">
-                <label class="form-check-label" for="investmentType2">Investment</label>
+                <label class="form-check-label" for="investmentType2" style="color: white">Investment</label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Register</button>
+        <button type="submit">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span>Register</span>
+        </button>
     </form>
     <div class="text-center mt-3">
         <a href="/login" class="text-decoration-none">Already have an account? Login</a>

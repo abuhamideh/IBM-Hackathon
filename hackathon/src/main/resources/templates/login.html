@@ -81,7 +81,7 @@
         border-radius: 0.6rem;
         position: relative;
         cursor: pointer;
-        overflow: hidden;
+        overflow: hidden;   
     }
 
 
@@ -91,11 +91,11 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        height: 35px;
-        width: 35px;
+        height: 8rem;
+        width: 8rem;
         background-color: #0c66ed;
         border-radius: 50%;
-        transition: .5s ease;
+        transition: .4s ease;
     }
 
     button span:nth-child(6) {
@@ -103,23 +103,23 @@
     }
 
     button span:nth-child(1) {
-        transform: translate(-3.3em, -4em);
+        transform: translate(-10em, -10em);
     }
 
     button span:nth-child(2) {
-        transform: translate(-6em, 1.3em);
+        transform: translate(-8em, 4em);
     }
 
     button span:nth-child(3) {
-        transform: translate(-.2em, 1.8em);
+        transform: translate(-0.2em, 1.8em);
     }
 
     button span:nth-child(4) {
-        transform: translate(3.5em, 1.4em);
+        transform: translate(7em, 2.4em);
     }
 
     button span:nth-child(5) {
-        transform: translate(3.5em, -3.8em);
+        transform: translate(14em, -7.6em);
     }
 
     button:hover span:not(:nth-child(6)) {
@@ -210,11 +210,26 @@
             </div>
         </div>
         <div class="btn-container">
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
+            
+            <button type="submit">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span class="text">Submit</span>
+            </button>
         </div>
     </form>
     <div class="btn-container mt-2">
-        <a href="/register" class="btn btn-primary w-100">Register</a>
+        <button onclick="location.href = '/register'">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span class="text">Register</span>
+        </button>
     </div>
 </div>
 </body>
