@@ -2,11 +2,10 @@
 let tempBalance = 0;
 let actualBalance = 0;
 let tempWeeks = 0;
-let actualWeeks = 0;
 
 // Fetch and display stock data
 async function fetchStockData() {
-    resetGameState();  // Ensure all values reset properly
+    resetGameState();
 
     document.getElementById("start-button").style.visibility = "hidden";
     await updateBalance();
@@ -65,6 +64,7 @@ async function fetchStockData() {
     }
 }
 
+//Plots graph
 function visualizeStock(labels, opens, closes) {
     const ctx = document.getElementById('stock').getContext('2d');
     // Destroy existing chart
@@ -175,7 +175,7 @@ async function updateBalance() {
             balanceDisplay = document.createElement('p');
             balanceDisplay.id = 'balance-display';
             document.getElementById("game-info").prepend(balanceDisplay);
-            balanceDisplay.textContent = `Current Balance: $${actualBalance}`;
+            balanceDisplay.textContent = `Current Balance: $${actualBalance} \r\n`;
         }
         tempBalance = actualBalance;
     } catch (error) {
@@ -191,7 +191,7 @@ async function displayBalance(balance) {
             balanceDisplay.id = 'balance-display';
             document.getElementById("game-info").prepend(balanceDisplay);
         }
-        balanceDisplay.textContent = `Current Balance: $${balance} `;
+        balanceDisplay.textContent = `Current Balance: $${balance} \r\n`;
         return balance;
     } catch (error) {
         console.error(`Error fetching balance: ${error}`);
@@ -205,12 +205,12 @@ async function displayWeeks(weeks) {
             weekDisplay.id = 'week-display';
             document.getElementById("game-info").prepend(weekDisplay);
         }
-        weekDisplay.textContent = `Weeks: ${weeks} `;
+        weekDisplay.textContent = `Weeks: ${weeks} \r\n`;
     } catch (error) {
         console.error(`Error fetching balance: ${error}`);
     }
 }
-//Subtracts money from user account
+//Subtracts money from a user account
 async function subtractBalance(investedAmount) {
     if (investedAmount > 0) {
         try {
@@ -290,10 +290,10 @@ function calculateStocks(balance, weeks) {
     }
 
     console.log(`Future Date: ${futureDateStr}, Future Price: $${futurePrice}`);
-    // Calculate percentage change
+
+
     const percentageChange = (futurePrice - initialPrice) / initialPrice;
 
-    // Calculate actual profit/loss based on invested amount
     const profitOrLoss = investedAmount * percentageChange;
 
     if (profitOrLoss > 0) {
@@ -308,7 +308,6 @@ function calculateStocks(balance, weeks) {
     resetGameState();
 }
 
-// Ensure event listeners are added only once
 document.getElementById("reset").addEventListener("click", () => {
     tempBalance = actualBalance;
     tempWeeks = 0;
