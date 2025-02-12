@@ -229,7 +229,7 @@
                 <label class="form-check-label" for="investmentType2" style="color: white">Investment</label>
             </div>
         </div>
-        <button onclick="checkPassword()" type="submit">
+        <button onclick="checkUsername(); checkPassword()" type="submit">
             <span></span>
             <span></span>
             <span></span>
@@ -243,6 +243,7 @@
     </div>
 </div>
 <script>
+    const username = document.getElementById('username');
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
 
@@ -250,6 +251,14 @@
         if (password.value !== confirmPassword.value) {
             alert("Passwords do not match.");
             confirmPassword.value = "";
+        }
+    }
+
+    async function checkUsername() {
+        const response = await fetch('/api/money/username');
+        if (response.ok) {
+            alert("Username already exists, please pick a different one!");
+            username.value = "";
         }
     }
 

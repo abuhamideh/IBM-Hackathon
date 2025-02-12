@@ -19,7 +19,7 @@ async function fetchStockData() {
     const options = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': '[redacted]',
+            'x-rapidapi-key': '[INSERT_API_KEY_HERE]',
             'x-rapidapi-host': 'yahoo-finance15.p.rapidapi.com'
         }
     };
